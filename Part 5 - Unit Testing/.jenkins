@@ -2,19 +2,22 @@ pipeline {
     agent any
     
     environment {
-	    PROJECT_NAME = "ECommerce Application"
-		REPO_PATH = "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\CodeGym"
-		PYTHON_PATH = "F:\\python\\python.exe"
-		PYTEST_PATH = "F:\\python\\Scripts\\pytest.exe"
-		SELENIUM_PATH = "E:\\12)DevOps\\SELENIUM\\Testing\\runAllTestSuites.bat"
-     }
+        PROJECT_NAME = "ECommerce Application"
+        REPO_PATH = "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\first pipieline@2"
+        PYTHON_PATH = "C:\\Users\\sansk\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+        PYTEST_PATH = "C:\\Users\\sansk\\AppData\\Local\\Programs\\Python\\Python312\\Scripts\\pytest.exe"
+        SELENIUM_PATH = "C:\\Users\\sansk\\Downloads\\CodeGym-main\\Part 5 - Unit Testing\\SELENIUM\\Testing\\runAllTestSuites.bat"
+        DOCKER_IMAGE_NAME = "code_gym_image"
+        DOCKER_CONTAINER_NAME = "code_gym_container"
+        //DOCKERHUB_REPO = "sanskar22003/code_gym_image:latest"
+    }
     
     stages {
         stage('Stage 1: Cloning Repository...') {
             steps {
                 echo "Project Name: ${env.PROJECT_NAME}"
                 ws("${env.REPO_PATH}") {
-                    git branch: 'main', credentialsId: '9e9e6add-7a7b-4743-a594-6365ee40d771', url: 'https://github.com/Kedarsdeo75/CodeGym.git'
+                    git branch: 'main', credentialsId: '65fd2953-20c8-47ac-90a5-de4ab6edf5a', url: 'https://github.com/sanskar22003/CodeGym.git'
                 }
             }
         }
@@ -32,15 +35,36 @@ pipeline {
                 echo 'Running Selenium TestCases...'
                 dir("${env.REPO_PATH}") {
                     catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                        bat "${env.PYTEST_PATH}" pytestsample.py
+                        bat "${env.PYTEST_PATH}"
                     }
                 }
             }
         }
-		stage('Stage 4: Build Docker Image') {
+        stage('Stage 4: Build and Run Docker Image') {
             steps {
-               echo 'Building Docker Image...'
+                echo 'Building Docker Image...'
+                dir("${env.REPO_PATH}") {
+                    script {
+                        // Build Docker image
+                        bat "docker build -t ${env.DOCKER_IMAGE_NAME} ."
+
+                        // Run Docker container
+                        bat "docker run --name ${env.DOCKER_CONTAINER_NAME} -d -p 5000:5000 ${env.DOCKER_IMAGE_NAME}"
+                    }
+                }
             }
         }
+        //stage('Stage 5: Push Docker Image to DockerHub') {
+            //steps {
+                //echo 'Pushing Docker Image to DockerHub...'
+                //script {
+                    //withCredentials([string(credentialsId: 'dockerhub-credentials', variable: 'DOCKERHUB_PASSWORD')]) {
+                        //bat "echo ${DOCKERHUB_PASSWORD} | docker login -u your_dockerhub_username --password-stdin"
+                        //bat "docker tag ${env.DOCKER_IMAGE_NAME} ${env.DOCKERHUB_REPO}"
+                        //bat "docker push ${env.DOCKERHUB_REPO}"
+                    //}
+                //}
+            //}
+        //}
     }
 }

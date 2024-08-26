@@ -1,0 +1,7 @@
+Flask
+codecarbon
+psutil
+pytest
+html-testRunner
+pymongo
+selenium
