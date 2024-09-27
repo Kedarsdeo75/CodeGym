@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 #client = MongoClient("mongodb+srv://vivek:vivek123@cluster0.ocpidbe.mongodb.net/?retryWrites=true&w=majority") # Replace with your mongo altas connection url
 
-client = MongoClient("mongodb+srv://kedar_deo:OpthaIT123#@cluster0.9zxitqi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0") 
+client = MongoClient("mongodb+srv://kedar_deo:#@cluster0.9zxitqi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0") 
 
 db = client["e-commerce"]  # Replace with your MongoDB database name
 products_collection = db["products"]
