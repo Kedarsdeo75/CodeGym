@@ -63,7 +63,7 @@ Text: {text}"""
 
 def main():
     # Test Products
-    Products = [
+    ProductPurchaseHistory = [
         """John R. Whitaker, a 52-year-old male, stands 5'10" (70 inches) tall and weighs 198
         lbs. Mr. Whitaker has a history of frequent online purchases of skincare and beauty products, 
         which began in his mid-40s, and recently started exploring high-end anti-aging creams and serums. 
@@ -94,7 +94,7 @@ def main():
         budget and her sleep schedule."""
     ]
 
-    for i, Product_text in enumerate(Products, 1):
+    for i, Product_text in enumerate(ProductPurchaseHistory, 1):
         print(f"\nProcessing Product {i}:")
         result = extract_Product_data(Product_text)
         if result:
